@@ -6,14 +6,18 @@ import firebase from 'firebase';
 import { AuthService } from "../services/auth.service";
 
 import { HomePage } from '../pages/home/home';
+import { MainPage } from '../pages/main/main.page';
+
 @Component({
   templateUrl: 'app.html'
 })
 export class MyApp {
   rootPage: any = HomePage;
 
-  constructor(platform: Platform, statusBar: StatusBar, 
-    splashScreen: SplashScreen, 
+    isAuthenticated = false;
+
+  constructor(platform: Platform, statusBar: StatusBar,
+    splashScreen: SplashScreen,
     private authService: AuthService) {
     platform.ready().then(() => {
       // Okay, so the platform is ready and our plugins are available.
@@ -30,8 +34,19 @@ export class MyApp {
         messagingSenderId: "627434895894"
       };
 
-      
+
       firebase.initializeApp(config);
+
+
+      firebase.auth().onAuthStateChanged(user => {
+        if (user) {
+          this.isAuthenticated = true;
+          this.rootPage = MainPage;
+        } else {
+          this.isAuthenticated = false;
+          this.rootPage = HomePage;
+        }
+      });
 
 
     });

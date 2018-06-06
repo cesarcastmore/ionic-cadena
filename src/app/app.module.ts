@@ -8,11 +8,16 @@ import { MyApp } from './app.component';
 import { HomePage } from '../pages/home/home';
 import { SignupPage } from '../pages/signup/signup';
 import { AuthService } from "../services/auth.service";
+import { MainPage } from "../pages/main/main.page";
+
+import { PerfilPage }from '../pages/perfil/perfil';
 @NgModule({
   declarations: [
     MyApp,
     HomePage,
-    SignupPage
+    SignupPage,
+    PerfilPage,
+    MainPage
   ],
   imports: [
     BrowserModule,
@@ -22,7 +27,9 @@ import { AuthService } from "../services/auth.service";
   entryComponents: [
     MyApp,
     HomePage,
-    SignupPage
+    SignupPage,
+    PerfilPage,
+    MainPage
   ],
   providers: [
     StatusBar,

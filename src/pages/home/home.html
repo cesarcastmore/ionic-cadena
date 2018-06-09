@@ -30,6 +30,28 @@
   <button ion-button full (click)="onSignin()">Iniciar Sesion</button>
   <ion-grid>
     <ion-row>
+      <ion-col col-4>
+        <button color="facebook-color" ion-button round>
+          <ion-icon name="logo-facebook">
+          </ion-icon>
+        </button>
+      </ion-col>
+      <ion-col color="twitter-color" col-4>
+        <button ion-button round>
+          <ion-icon name="logo-twitter">
+          </ion-icon>
+        </button>
+      </ion-col>
+      <ion-col col-4>
+        <button color="google-plus-color" ion-button round>
+          <ion-icon name="logo-googleplus">
+          </ion-icon>
+        </button>
+      </ion-col>
+    </ion-row>
+  </ion-grid>
+  <ion-grid>
+    <ion-row>
       <ion-col col-6>
         <button ion-button clear (tap)="goToSignUp()">¿No tienes una cuenta? crea una</button>
       </ion-col>

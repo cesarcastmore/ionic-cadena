@@ -5,6 +5,8 @@ import { LoadingController, AlertController } from "ionic-angular";
 import { FormGroup, FormBuilder, FormControl } from "@angular/forms";
 
 import { AuthService } from "../..//services/auth.service";
+import { Facebook } from '@ionic-native/facebook'
+import firebase from 'firebase';
 
 @Component({
   selector: 'page-home',
@@ -18,7 +20,8 @@ export class HomePage {
     private loadingCtrl: LoadingController,
     private alertCtrl: AlertController,
     private fb: FormBuilder,
-    public navCtrl: NavController ) {
+    public navCtrl: NavController,
+    private facebook: Facebook ) {
 
     this.userForm = this.fb.group({
       email: new FormControl(),
@@ -30,7 +33,6 @@ export class HomePage {
 
 
   public goToSignUp() {
-    console.log("entrooooo");
     this.navCtrl.push(SignupPage);
   }
 
@@ -59,5 +61,46 @@ export class HomePage {
         alert.present();
       });
   }
+
+
+  public loginFacebook(){
+    const loading = this.loadingCtrl.create({
+      content: 'Iniciando sesion'
+    });
+
+    loading.present();
+
+    this.facebookLogin()
+      .then(data => {
+        loading.dismiss();
+      })
+      .catch(error => {
+        loading.dismiss();
+
+        const alert = this.alertCtrl.create({
+          title: 'Signin failed!',
+          message: error.message,
+          buttons: ['Ok']
+        });
+        
+        alert.present();
+      });
+  }
+
+
+
+  facebookLogin(): Promise<any> {
+  return this.facebook.login(['email'])
+    .then( response => {
+      const facebookCredential = firebase.auth.FacebookAuthProvider
+        .credential(response.authResponse.accessToken);
+
+      firebase.auth().signInWithCredential(facebookCredential)
+        .then( success => { 
+          console.log("Firebase success: " + JSON.stringify(success)); 
+        });
+
+    }).catch((error) => { console.log(error) });
+}
 
 }

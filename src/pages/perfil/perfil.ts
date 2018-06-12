@@ -1,5 +1,5 @@
 import { Component } from '@angular/core';
-import { Platform, NavController, MenuController } from 'ionic-angular';
+import { MenuController } from 'ionic-angular';
 import { AuthService } from "../../services/auth.service";
 @Component({
   selector: 'page-perfil',

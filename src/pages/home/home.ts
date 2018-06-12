@@ -38,7 +38,7 @@ export class HomePage {
   onSignin() {
 
     const loading = this.loadingCtrl.create({
-      content: 'Signing you in...'
+      content: 'Iniciando sesion'
     });
 
     loading.present();

@@ -7,7 +7,13 @@ import {
 } from 'ionic-angular';
 import { FormGroup, FormBuilder, FormControl } from "@angular/forms";
 import { AuthService } from "../../services/auth.service";
-
+/*
+export ANDROID_HOME=~/Android/Sdk/
+export PATH=${PATH}:~/Android/Sdk/platform-tools:~/Android/Sdk/tools
+export PATH=$PATH:/opt/gradle/gradle-4.8/bin
+export PATH=$PATH:/opt/gradle/gradle-4.8/bin
+source ~/.bash_profile
+*/
 @Component({
   selector: 'page-signup',
   templateUrl: 'signup.html',

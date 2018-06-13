@@ -5,8 +5,13 @@ import { LoadingController, AlertController } from "ionic-angular";
 import { FormGroup, FormBuilder, FormControl } from "@angular/forms";
 
 import { AuthService } from "../..//services/auth.service";
-import { Facebook } from '@ionic-native/facebook'
+import { Facebook } from '@ionic-native/facebook';
+import { GooglePlus } from '@ionic-native/google-plus';
+
 import firebase from 'firebase';
+
+//https://angularfirebase.com/lessons/ionic-google-login-with-firebase-and-angularfire/
+
 
 @Component({
   selector: 'page-home',
@@ -21,7 +26,8 @@ export class HomePage {
     private alertCtrl: AlertController,
     private fb: FormBuilder,
     public navCtrl: NavController,
-    private facebook: Facebook ) {
+    private facebook: Facebook,
+    private gplus: GooglePlus) {
 
     this.userForm = this.fb.group({
       email: new FormControl(),
@@ -57,13 +63,13 @@ export class HomePage {
           message: error.message,
           buttons: ['Ok']
         });
-        
+
         alert.present();
       });
   }
 
 
-  public loginFacebook(){
+  public loginFacebook() {
     const loading = this.loadingCtrl.create({
       content: 'Iniciando sesion'
     });
@@ -82,25 +88,39 @@ export class HomePage {
           message: error.message,
           buttons: ['Ok']
         });
-        
+
         alert.present();
       });
   }
 
+  public loginGoogle() {
+    const loading = this.loadingCtrl.create({
+      content: 'Iniciando sesion'
+    });
+
+    loading.present();
+
+    this.gplus.login({}).then(res => {
+        loading.dismiss();
+
+      })
+    .catch(err => console.error(err));
+    }
 
 
-  facebookLogin(): Promise<any> {
-  return this.facebook.login(['email'])
-    .then( response => {
-      const facebookCredential = firebase.auth.FacebookAuthProvider
-        .credential(response.authResponse.accessToken);
 
-      firebase.auth().signInWithCredential(facebookCredential)
-        .then( success => { 
-          console.log("Firebase success: " + JSON.stringify(success)); 
-        });
+    facebookLogin(): Promise < any > {
+      return this.facebook.login(['email'])
+        .then(response => {
+          const facebookCredential = firebase.auth.FacebookAuthProvider
+            .credential(response.authResponse.accessToken);
 
-    }).catch((error) => { console.log(error) });
-}
+          firebase.auth().signInWithCredential(facebookCredential)
+            .then(success => {
+              console.log("Firebase success: " + JSON.stringify(success));
+            });
 
-}
+        }).catch((error) => { console.log(error) });
+    }
+
+  }

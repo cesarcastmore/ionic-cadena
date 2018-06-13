@@ -10,6 +10,7 @@ import { SignupPage } from '../pages/signup/signup';
 import { AuthService } from "../services/auth.service";
 import { MainPage } from "../pages/main/main.page";
 import { Facebook } from '@ionic-native/facebook'
+import { GooglePlus } from '@ionic-native/google-plus';
 
 import { PerfilPage }from '../pages/perfil/perfil';
 @NgModule({
@@ -37,7 +38,8 @@ import { PerfilPage }from '../pages/perfil/perfil';
     SplashScreen,
     AuthService,
     {provide: ErrorHandler, useClass: IonicErrorHandler},
-    Facebook
+    Facebook,
+    GooglePlus
   ]
 })
 export class AppModule {}

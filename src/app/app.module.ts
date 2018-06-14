@@ -11,8 +11,24 @@ import { AuthService } from "../services/auth.service";
 import { MainPage } from "../pages/main/main.page";
 import { Facebook } from '@ionic-native/facebook'
 import { GooglePlus } from '@ionic-native/google-plus';
+import { AngularFireModule } from 'angularfire2';
+import { AngularFireAuth } from 'angularfire2/auth';
+//https://devdactic.com/ionic-firebase-angularfire/
 
-import { PerfilPage }from '../pages/perfil/perfil';
+export const firebaseConfig = {
+  fire: {
+    apiKey: "AIzaSyD5EzD157rKZsQrITNVfAB2Ruj0ToJgvRI",
+    authDomain: "ionic-cadena.firebaseapp.com",
+    databaseURL: "https://ionic-cadena.firebaseio.com",
+    projectId: "ionic-cadena",
+    storageBucket: "ionic-cadena.appspot.com",
+    messagingSenderId: "627434895894"
+  }
+};
+
+
+
+import { PerfilPage } from '../pages/perfil/perfil';
 @NgModule({
   declarations: [
     MyApp,
@@ -23,7 +39,9 @@ import { PerfilPage }from '../pages/perfil/perfil';
   ],
   imports: [
     BrowserModule,
-    IonicModule.forRoot(MyApp)
+    IonicModule.forRoot(MyApp),
+    AngularFireModule.initializeApp(firebaseConfig.fire),
+
   ],
   bootstrap: [IonicApp],
   entryComponents: [
@@ -37,9 +55,10 @@ import { PerfilPage }from '../pages/perfil/perfil';
     StatusBar,
     SplashScreen,
     AuthService,
-    {provide: ErrorHandler, useClass: IonicErrorHandler},
+    { provide: ErrorHandler, useClass: IonicErrorHandler },
     Facebook,
-    GooglePlus
+    GooglePlus,
+    AngularFireAuth
   ]
 })
 export class AppModule {}

@@ -12,6 +12,8 @@ import firebase from 'firebase';
 
 //https://angularfirebase.com/lessons/ionic-google-login-with-firebase-and-angularfire/
 //https://medium.com/@salonimalhotra1ind/ionic-google-sign-in-with-firebase-5d10282cc78
+//https://medium.com/appseed-io/integrating-firebase-password-and-google-authentication-into-your-ionic-3-app-2421cee32db9
+//https://angularfirebase.com/lessons/ionic-google-login-with-firebase-and-angularfire/ 
 
 @Component({
   selector: 'page-home',
@@ -58,7 +60,7 @@ export class HomePage {
 
     this.loading.present();
 
-    this.authService.signin(this.userForm.value.email, this.userForm.value.password)
+    this.authService.signInWithEmail(this.userForm.value.email, this.userForm.value.password)
       .then(data => {
         this.loading.dismiss();
       })
@@ -70,6 +72,45 @@ export class HomePage {
 
       });
   }
+
+
+
+  public loginGoogle() {
+
+    this.loading.present();
+
+    this.gplus.login({
+        'webClientId': '627434895894-agnmqvlptc9f5r84uh3indcf40puua60.apps.googleusercontent.com',
+        'offline': false,
+        'scopes': 'profile email'
+      }).then(response => {
+
+        this.loading.dismiss();
+
+
+        const googlePlusCredential = firebase.auth.GoogleAuthProvider
+          .credential(response.idToken);
+
+        this.authService.oauthSignIn(googlePlusCredential).then(success => {
+
+        }).catch(error => {
+          console.log(error);
+
+        });
+
+
+
+      })
+      .catch(error => {
+        this.alert.setMessage(error);
+        this.alert.present();
+
+      });
+  }
+
+
+
+
 
   // Metodo para iniciar sesion de facebook
   public loginFacebook() {
@@ -90,37 +131,6 @@ export class HomePage {
       });
   }
 
-  public loginGoogle() {
-
-    this.loading.present();
-
-    this.gplus.login({
-        'webClientId': '627434895894-agnmqvlptc9f5r84uh3indcf40puua60.apps.googleusercontent.com',
-        'offline': false,
-        'scopes': 'profile email'
-      }).then(response => {
-        this.loading.dismiss();
-
-
-        const googlePlusCredential = firebase.auth.GoogleAuthProvider
-          .credential(response.idToken);
-
-        firebase.auth().signInWithCredential(googlePlusCredential).then(success => {
-
-        }).catch(error => {
-          console.log(error);
-
-        });
-
-
-
-      })
-      .catch(error => {
-        this.alert.setMessage(error);
-        this.alert.present();
-
-      });
-  }
 
 
 
@@ -131,7 +141,7 @@ export class HomePage {
         const facebookCredential = firebase.auth.FacebookAuthProvider
           .credential(response.authResponse.accessToken);
 
-        firebase.auth().signInWithCredential(facebookCredential).then(success => {
+        this.authService.oauthSignIn(facebookCredential).then(success => {
           console.log("Firebase success: " + JSON.stringify(success));
         });
 

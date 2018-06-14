@@ -7,13 +7,13 @@ import { AuthService } from "../../services/auth.service";
 })
 
 export class PerfilPage {
-	constructor( private authService: AuthService, private menuCtrl: MenuController){
+  constructor(private authService: AuthService, private menuCtrl: MenuController) {
 
-	}
+  }
 
 
-	  onLogout() {
-    this.authService.logout();
+  onLogout() {
+    this.authService.signOut();
     this.menuCtrl.close();
   }
 }

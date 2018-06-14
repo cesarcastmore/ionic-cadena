@@ -42,7 +42,7 @@ export class SignupPage {
       content: 'Signing you up...'
     });
     loading.present();
-    this.authService.signup(this.userForm.value.email, this.userForm.value.password)
+    this.authService.signUp(this.userForm.value.email, this.userForm.value.password)
       .then(data => {
         loading.dismiss();
         this.navCtrl.pop();

@@ -2,7 +2,6 @@ import { Component } from '@angular/core';
 import { Platform } from 'ionic-angular';
 import { StatusBar } from '@ionic-native/status-bar';
 import { SplashScreen } from '@ionic-native/splash-screen';
-import firebase from 'firebase';
 import { AuthService } from "../services/auth.service";
 
 import { HomePage } from '../pages/home/home';
@@ -14,7 +13,7 @@ import { MainPage } from '../pages/main/main.page';
 export class MyApp {
   rootPage: any = HomePage;
 
-    isAuthenticated = false;
+  isAuthenticated = false;
 
   constructor(platform: Platform, statusBar: StatusBar,
     splashScreen: SplashScreen,
@@ -25,21 +24,12 @@ export class MyApp {
       statusBar.styleDefault();
       splashScreen.hide();
 
-      let config = {
-        apiKey: "AIzaSyD5EzD157rKZsQrITNVfAB2Ruj0ToJgvRI",
-        authDomain: "ionic-cadena.firebaseapp.com",
-        databaseURL: "https://ionic-cadena.firebaseio.com",
-        projectId: "ionic-cadena",
-        storageBucket: "ionic-cadena.appspot.com",
-        messagingSenderId: "627434895894"
-      };
 
 
-      firebase.initializeApp(config);
 
 
-      firebase.auth().onAuthStateChanged(user => {
-        if (user) {
+      this.authService.authState().subscribe(auth => {
+        if (auth) {
           this.isAuthenticated = true;
           this.rootPage = MainPage;
         } else {

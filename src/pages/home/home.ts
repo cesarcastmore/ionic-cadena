@@ -25,6 +25,12 @@ export class HomePage {
     content: 'Iniciando sesion'
   });
 
+  private alert = this.alertCtrl.create({
+    title: 'Error al iniciar sesion!',
+    buttons: ['Ok']
+  });
+
+
   constructor(private authService: AuthService,
     private loadingCtrl: LoadingController,
     private alertCtrl: AlertController,
@@ -57,19 +63,15 @@ export class HomePage {
         this.loading.dismiss();
       })
       .catch(error => {
+
         this.loading.dismiss();
+        this.alert.setMessage(error.message);
+        this.alert.present();
 
-        const alert = this.alertCtrl.create({
-          title: 'Signin failed!',
-          message: error.message,
-          buttons: ['Ok']
-        });
-
-        alert.present();
       });
   }
 
-
+  // Metodo para iniciar sesion de facebook
   public loginFacebook() {
 
 
@@ -80,15 +82,11 @@ export class HomePage {
         this.loading.dismiss();
       })
       .catch(error => {
+
         this.loading.dismiss();
+        this.alert.setMessage(error);
+        this.alert.present();
 
-        const alert = this.alertCtrl.create({
-          title: 'Signin failed!',
-          message: error.message,
-          buttons: ['Ok']
-        });
-
-        alert.present();
       });
   }
 
@@ -103,39 +101,23 @@ export class HomePage {
       }).then(response => {
         this.loading.dismiss();
 
-        console.log("entrando aqui");
 
         const googlePlusCredential = firebase.auth.GoogleAuthProvider
           .credential(response.idToken);
 
         firebase.auth().signInWithCredential(googlePlusCredential).then(success => {
-          console.log("Firebase success: " + JSON.stringify(success));
-          const alert = this.alertCtrl.create({
-            title: 'Ha entrado',
-            message: 'entrooo',
-            buttons: ['Ok']
-          });
-          alert.present();
-        }).catch(error=>{
-           const alert = this.alertCtrl.create({
-            title: 'Ha error',
-            message: error,
-            buttons: ['Ok']
-          });
-          alert.present();
+
+        }).catch(error => {
+          console.log(error);
+
         });
 
 
 
       })
-      .catch(err => {
-        const alert = this.alertCtrl.create({
-          title: 'Signin failed!',
-          message: err,
-          buttons: ['Ok']
-        });
-        alert.present();
-        
+      .catch(error => {
+        this.alert.setMessage(error);
+        this.alert.present();
 
       });
   }
@@ -153,7 +135,7 @@ export class HomePage {
           console.log("Firebase success: " + JSON.stringify(success));
         });
 
-      }).catch((error) => { console.log(error) });
+      }).catch((error) => { console.log(error); });
   }
 
 }

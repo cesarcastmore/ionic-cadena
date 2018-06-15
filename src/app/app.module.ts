@@ -1,3 +1,18 @@
+/*
+
+FIREBASE Y ANGULARFIRE2
+https://devdactic.com/ionic-firebase-angularfire/
+https://angularfirebase.com/lessons/ionic-google-login-with-firebase-and-angularfire/
+https://medium.com/@salonimalhotra1ind/ionic-google-sign-in-with-firebase-5d10282cc78
+https://medium.com/appseed-io/integrating-firebase-password-and-google-authentication-into-your-ionic-3-app-2421cee32db9
+https://angularfirebase.com/lessons/ionic-google-login-with-firebase-and-angularfire/ 
+
+
+LIFECYCLE LIFE
+https://blog.ionicframework.com/navigating-lifecycle-events/
+http://www.ionichelper.com/2016/10/11/ionic-2-components-quick-guide-series-app/
+*/
+
 import { BrowserModule } from '@angular/platform-browser';
 import { ErrorHandler, NgModule } from '@angular/core';
 import { IonicApp, IonicErrorHandler, IonicModule } from 'ionic-angular';
@@ -13,7 +28,8 @@ import { Facebook } from '@ionic-native/facebook'
 import { GooglePlus } from '@ionic-native/google-plus';
 import { AngularFireModule } from 'angularfire2';
 import { AngularFireAuth } from 'angularfire2/auth';
-//https://devdactic.com/ionic-firebase-angularfire/
+import { AngularFireDatabase } from 'angularfire2/database';
+
 
 export const firebaseConfig = {
   fire: {
@@ -27,8 +43,9 @@ export const firebaseConfig = {
 };
 
 
-
 import { PerfilPage } from '../pages/perfil/perfil';
+import { FireBaseService } from "../services/firebase.service";
+
 @NgModule({
   declarations: [
     MyApp,
@@ -58,7 +75,9 @@ import { PerfilPage } from '../pages/perfil/perfil';
     { provide: ErrorHandler, useClass: IonicErrorHandler },
     Facebook,
     GooglePlus,
-    AngularFireAuth
+    AngularFireAuth,
+    AngularFireDatabase,
+    FireBaseService
   ]
 })
 export class AppModule {}

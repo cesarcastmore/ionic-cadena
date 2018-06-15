@@ -24,7 +24,20 @@ export class FireBaseService {
 
 
   public create(item: any){
-  	return this.afd.list('/'+this.entity + '/').push(item);
+  	let newItem = this.afd.list('/'+this.entity + '/').push(item);
+    item['id'] = newItem.key;
+    return item;
+  }
+
+
+  public update(item: any){
+    let updateItem = this.afd.list('/'+this.entity + '/');
+    let id = item.id; 
+    updateItem.update(id, item
+);
+    item['id'] = id;
+
+    return item;
   }
 
 

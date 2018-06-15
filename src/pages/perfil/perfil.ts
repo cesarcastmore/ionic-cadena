@@ -10,6 +10,9 @@ import { FireBaseService } from "../../services/firebase.service";
 })
 
 export class PerfilPage {
+
+  public perfil; 
+
   constructor(private authService: AuthService, 
   	private fbs: FireBaseService,
   	private menuCtrl: MenuController) {
@@ -23,10 +26,21 @@ export class PerfilPage {
   }
 
   ionViewDidLoad(){
-    this.fbs.setEntity('perfil');
-  	this.fbs.create({
-  		name: 'hello'
-  	})
+    this.fbs.setEntity('perfiles');
+    console.log(this.authService.user);
+    this.perfil = {
+      uid: this.authService.user.uid,
+      email: this.authService.user.email,
+      displayName: this.authService.user.displayName
+    }
+    ;
+  	this.perfil = this.fbs.create(this.perfil);
+    this.perfil['nombre']='cesar';
+        this.perfil['apellido']='castillo';
+
+    this.perfil = this.fbs.update(this.perfil);
+
+    console.log(this.perfil);
 
 
 

@@ -1,5 +1,6 @@
 import { Component, ViewChild, ElementRef } from '@angular/core';
 import { NavController, NavParams } from 'ionic-angular';
+import {Validators, FormBuilder, FormGroup, FormControl} from '@angular/forms';
 
 declare var google;
 
@@ -20,12 +21,18 @@ export class RutaPage {
 
   @ViewChild('map') mapElement: ElementRef;
   map: any;
-  start = 'chicago, il';
-  end = 'chicago, il';
-  directionsService = new google.maps.DirectionsService;
-  directionsDisplay = new google.maps.DirectionsRenderer;
+  public rutaForm: FormGroup;
 
-  constructor(public navCtrl: NavController) {
+
+
+  constructor(public navCtrl: NavController, 
+    private fb: FormBuilder) {
+
+    this.rutaForm= this.fb.group({
+      origen: new FormControl(),
+      destino: new FormControl()
+
+    });
 
   }
 
@@ -34,13 +41,16 @@ export class RutaPage {
   }
 
   initMap() {
-
-    console.log("ENTROOOOO   ");
     this.map = new google.maps.Map(this.mapElement.nativeElement, {
       zoom: 7,
       center: { lat: 41.85, lng: -87.65 }
     });
 
-    this.directionsDisplay.setMap(this.map);
+  }
+
+  public onLocation(){
+    this.rutaForm.markAsPristine();
+        this.initMap();
+
   }
 }

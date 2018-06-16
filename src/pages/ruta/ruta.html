@@ -10,17 +10,25 @@
     
   </ion-navbar>
 </ion-header>
-<ion-content>
+<ion-content [formGroup]="rutaForm">
+  {{rutaForm.dirty }}
+  {{rutaForm.touched }}
+  {{rutaForm.untouched }}
+  {{rutaForm.pristine }}
+
   <ion-list>
     <ion-item>
       <ion-label color="primary">Origen</ion-label>
-      <ion-input></ion-input>
+      <ion-input formControlName="origen"></ion-input>
     </ion-item>
     <ion-item>
       <ion-label color="primary">Destino</ion-label>
-      <ion-input></ion-input>
+      <ion-input formControlName="destino"></ion-input>
     </ion-item>
   </ion-list>
-  <div #map id="map"></div>
-
+  <div #map id="map" [class.hide_map]="!rutaForm.pristine"></div>
+  <ion-list>
+    <ion-item (click)="rutaForm.markAsPristine(true)">
+</ion-item>
+  </ion-list>
 </ion-content>

@@ -29,7 +29,8 @@ import { GooglePlus } from '@ionic-native/google-plus';
 import { AngularFireModule } from 'angularfire2';
 import { AngularFireAuth } from 'angularfire2/auth';
 import { AngularFireDatabase } from 'angularfire2/database';
-
+import { SolicitudesPage } from '../pages/solicitudes/solicitudes.page';
+import { SolicitudPage } from '../pages/solicitud/solicitud';
 
 export const firebaseConfig = {
   fire: {
@@ -52,7 +53,9 @@ import { FireBaseService } from "../services/firebase.service";
     HomePage,
     SignupPage,
     PerfilPage,
-    MainPage
+    MainPage,
+    SolicitudesPage,
+    SolicitudPage
   ],
   imports: [
     BrowserModule,
@@ -66,7 +69,9 @@ import { FireBaseService } from "../services/firebase.service";
     HomePage,
     SignupPage,
     PerfilPage,
-    MainPage
+    MainPage,
+    SolicitudesPage,
+    SolicitudPage
   ],
   providers: [
     StatusBar,

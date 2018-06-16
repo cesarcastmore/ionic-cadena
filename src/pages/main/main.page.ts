@@ -2,6 +2,7 @@ import { Component, ViewChild } from '@angular/core';
 import { NavController, NavParams } from 'ionic-angular';
 import { PerfilPage } from '../perfil/perfil';
 import { SolicitudesPage } from '../solicitudes/solicitudes.page';
+import { RutasPage } from '../rutas/rutas';
 
 @Component({
   selector: 'page-main',
@@ -15,6 +16,7 @@ export class MainPage {
   private rootPage;
   private perfilPage = PerfilPage;
   private solicitudesPage = SolicitudesPage;
+  private rutasPage= RutasPage;
 
   constructor(public navCtrl: NavController, public navParams: NavParams) {
     this.rootPage = PerfilPage;

@@ -31,6 +31,8 @@ import { AngularFireAuth } from 'angularfire2/auth';
 import { AngularFireDatabase } from 'angularfire2/database';
 import { SolicitudesPage } from '../pages/solicitudes/solicitudes.page';
 import { SolicitudPage } from '../pages/solicitud/solicitud';
+import { RutaPage } from '../pages/ruta/ruta';
+import { RutasPage } from '../pages/rutas/rutas';
 
 export const firebaseConfig = {
   fire: {
@@ -55,7 +57,9 @@ import { FireBaseService } from "../services/firebase.service";
     PerfilPage,
     MainPage,
     SolicitudesPage,
-    SolicitudPage
+    SolicitudPage,
+    RutaPage,
+    RutasPage
   ],
   imports: [
     BrowserModule,
@@ -71,7 +75,9 @@ import { FireBaseService } from "../services/firebase.service";
     PerfilPage,
     MainPage,
     SolicitudesPage,
-    SolicitudPage
+    SolicitudPage,
+    RutaPage,
+    RutasPage
   ],
   providers: [
     StatusBar,

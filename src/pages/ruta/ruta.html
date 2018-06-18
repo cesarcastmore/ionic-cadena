@@ -7,15 +7,9 @@
 <ion-header>
   <ion-navbar>
     <ion-title>Ruta</ion-title>
-    
   </ion-navbar>
 </ion-header>
 <ion-content [formGroup]="rutaForm">
-  {{rutaForm.dirty }}
-  {{rutaForm.touched }}
-  {{rutaForm.untouched }}
-  {{rutaForm.pristine }}
-
   <ion-list>
     <ion-item>
       <ion-label color="primary">Origen</ion-label>
@@ -28,7 +22,8 @@
   </ion-list>
   <div #map id="map" [class.hide_map]="!rutaForm.pristine"></div>
   <ion-list>
-    <ion-item (click)="rutaForm.markAsPristine(true)">
-</ion-item>
+    <button ion-item (click)="onLocation(location)" *ngFor="let location of locations" >
+      {{location.formatted_address}} 
+    </button>
   </ion-list>
 </ion-content>

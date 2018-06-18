@@ -1,8 +1,9 @@
 import { Component, ViewChild, ElementRef } from '@angular/core';
-import { NavController, NavParams } from 'ionic-angular';
-import {Validators, FormBuilder, FormGroup, FormControl} from '@angular/forms';
+import { NavController } from 'ionic-angular';
+import {  FormBuilder, FormGroup, FormControl } from '@angular/forms';
+import { GoogleApiService } from "../../services/google-api.service";
 
-declare var google;
+declare let google;
 
 
 /**
@@ -20,15 +21,17 @@ export class RutaPage {
 
 
   @ViewChild('map') mapElement: ElementRef;
-  map: any;
+  public map: any;
   public rutaForm: FormGroup;
+  public locations: any;
+  public changePoint: string;
 
 
+  constructor(public navCtrl: NavController,
+    private fb: FormBuilder,
+    private googleApi: GoogleApiService) {
 
-  constructor(public navCtrl: NavController, 
-    private fb: FormBuilder) {
-
-    this.rutaForm= this.fb.group({
+    this.rutaForm = this.fb.group({
       origen: new FormControl(),
       destino: new FormControl()
 
@@ -36,11 +39,13 @@ export class RutaPage {
 
   }
 
-  ionViewDidLoad() {
+  public ionViewDidLoad() {
     this.initMap();
+    this.changeForm();
+
   }
 
-  initMap() {
+  public initMap() {
     this.map = new google.maps.Map(this.mapElement.nativeElement, {
       zoom: 7,
       center: { lat: 41.85, lng: -87.65 }
@@ -48,9 +53,40 @@ export class RutaPage {
 
   }
 
-  public onLocation(){
+  public onLocation(location: any) {
+
+
     this.rutaForm.markAsPristine();
-        this.initMap();
+    if (this.changePoint == 'origen') {
+      this.rutaForm.patchValue({
+        origen: location.formatted_address
+      });
+    } else if (this.changePoint == 'destino') {
+      this.rutaForm.patchValue({
+        destino: location.formatted_address
+      });
+    }
 
   }
+
+
+  public changeForm(): void {
+    this.rutaForm.get('origen').valueChanges.subscribe(val => {
+      this.googleApi.searchLocation(val).subscribe(data => {
+        console.log(data);
+        this.locations = data.results;
+        this.changePoint = 'origen';
+      });
+    });
+
+    this.rutaForm.get('destino').valueChanges.subscribe(val => {
+      this.googleApi.searchLocation(val).subscribe(data => {
+        this.locations = data.results;
+        this.changePoint = 'destino';
+
+      });
+    });
+
+  }
+
 }

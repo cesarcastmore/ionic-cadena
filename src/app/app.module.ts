@@ -33,6 +33,8 @@ import { SolicitudesPage } from '../pages/solicitudes/solicitudes.page';
 import { SolicitudPage } from '../pages/solicitud/solicitud';
 import { RutaPage } from '../pages/ruta/ruta';
 import { RutasPage } from '../pages/rutas/rutas';
+import { HttpClientModule } from '@angular/common/http'; 
+import { GoogleApiService } from  '../services/google-api.service';
 
 export const firebaseConfig = {
   fire: {
@@ -65,6 +67,7 @@ import { FireBaseService } from "../services/firebase.service";
     BrowserModule,
     IonicModule.forRoot(MyApp),
     AngularFireModule.initializeApp(firebaseConfig.fire),
+    HttpClientModule
 
   ],
   bootstrap: [IonicApp],
@@ -88,7 +91,8 @@ import { FireBaseService } from "../services/firebase.service";
     GooglePlus,
     AngularFireAuth,
     AngularFireDatabase,
-    FireBaseService
+    FireBaseService,
+    GoogleApiService
   ]
 })
 export class AppModule {}

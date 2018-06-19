@@ -1,7 +1,8 @@
 import { Component } from '@angular/core';
 import { MenuController } from 'ionic-angular';
 import { AuthService } from "../../services/auth.service";
-import { FireBaseService } from "../../services/firebase.service";
+import { FireStoreService, Query } from '../../services/firestore.service';
+import * as firebase from 'firebase/app';
 
 
 @Component({
@@ -11,11 +12,11 @@ import { FireBaseService } from "../../services/firebase.service";
 
 export class PerfilPage {
 
-  public perfil; 
+  public perfil;
 
-  constructor(private authService: AuthService, 
-  	private fbs: FireBaseService,
-  	private menuCtrl: MenuController) {
+  constructor(private authService: AuthService,
+    private menuCtrl: MenuController,
+    private fs: FireStoreService) {
 
   }
 
@@ -25,22 +26,26 @@ export class PerfilPage {
     this.menuCtrl.close();
   }
 
-  ionViewDidLoad(){
-    this.fbs.setEntity('perfiles');
+  ionViewDidLoad() {
     console.log(this.authService.user);
     this.perfil = {
       uid: this.authService.user.uid,
       email: this.authService.user.email,
       displayName: this.authService.user.displayName
     }
-    ;
-  	this.perfil = this.fbs.create(this.perfil);
-    this.perfil['nombre']='cesar';
-        this.perfil['apellido']='castillo';
+    this.fs.setEntity('usuarios');
 
-    this.perfil = this.fbs.update(this.perfil);
 
-    console.log(this.perfil);
+    let query: Query = new Query();
+    query._where('F', '==', 'CESD');
+
+    this.fs.filter(query).valueChanges().subscribe(data => {
+      console.log(data);
+
+    });
+
+
+    this.fs.create(this.perfil);
 
 
 

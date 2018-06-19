@@ -6,7 +6,7 @@ https://angularfirebase.com/lessons/ionic-google-login-with-firebase-and-angular
 https://medium.com/@salonimalhotra1ind/ionic-google-sign-in-with-firebase-5d10282cc78
 https://medium.com/appseed-io/integrating-firebase-password-and-google-authentication-into-your-ionic-3-app-2421cee32db9
 https://angularfirebase.com/lessons/ionic-google-login-with-firebase-and-angularfire/ 
-
+https://www.firebase.com/docs/web/libraries/angular/api.html
 
 LIFECYCLE LIFE
 https://blog.ionicframework.com/navigating-lifecycle-events/
@@ -26,15 +26,21 @@ import { AuthService } from "../services/auth.service";
 import { MainPage } from "../pages/main/main.page";
 import { Facebook } from '@ionic-native/facebook'
 import { GooglePlus } from '@ionic-native/google-plus';
+
 import { AngularFireModule } from 'angularfire2';
-import { AngularFireAuth } from 'angularfire2/auth';
-import { AngularFireDatabase } from 'angularfire2/database';
+import { AngularFirestoreModule } from 'angularfire2/firestore';
+import { AngularFireStorageModule } from 'angularfire2/storage';
+import { AngularFireAuthModule } from 'angularfire2/auth';
+
 import { SolicitudesPage } from '../pages/solicitudes/solicitudes.page';
 import { SolicitudPage } from '../pages/solicitud/solicitud';
 import { RutaPage } from '../pages/ruta/ruta';
 import { RutasPage } from '../pages/rutas/rutas';
-import { HttpClientModule } from '@angular/common/http'; 
-import { GoogleApiService } from  '../services/google-api.service';
+import { HttpClientModule } from '@angular/common/http';
+
+import { GoogleApiService } from '../services/google-api.service';
+import { FireStoreService } from '../services/firestore.service';
+
 
 export const firebaseConfig = {
   fire: {
@@ -49,7 +55,6 @@ export const firebaseConfig = {
 
 
 import { PerfilPage } from '../pages/perfil/perfil';
-import { FireBaseService } from "../services/firebase.service";
 
 @NgModule({
   declarations: [
@@ -67,7 +72,12 @@ import { FireBaseService } from "../services/firebase.service";
     BrowserModule,
     IonicModule.forRoot(MyApp),
     AngularFireModule.initializeApp(firebaseConfig.fire),
-    HttpClientModule
+    AngularFirestoreModule.enablePersistence(), // imports firebase/firestore, only needed for database features
+    AngularFireAuthModule, // imports firebase/auth, only needed for auth features,
+    AngularFireStorageModule, // imports firebase/storage only needed for storage features
+    HttpClientModule,
+
+
 
   ],
   bootstrap: [IonicApp],
@@ -89,10 +99,9 @@ import { FireBaseService } from "../services/firebase.service";
     { provide: ErrorHandler, useClass: IonicErrorHandler },
     Facebook,
     GooglePlus,
-    AngularFireAuth,
-    AngularFireDatabase,
-    FireBaseService,
-    GoogleApiService
+    GoogleApiService,
+    AuthService,
+    FireStoreService
   ]
 })
 export class AppModule {}

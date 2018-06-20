@@ -1,4 +1,4 @@
-import { HttpClient } from '@angular/common/http';
+import { Http } from '@angular/http';
 import { Injectable } from '@angular/core';
 import { Observable } from 'rxjs';
 import 'rxjs/add/operator/map';
@@ -9,13 +9,13 @@ export class GoogleApiService {
   private geolocate = "https://maps.googleapis.com/maps/api/geocode/json";
   private key = "AIzaSyBeOdQqfn5NvUzfEwD5Q5haXiBRR9wr7Eo";
 
-  constructor(private http: HttpClient) {}
+  constructor(private http: Http) {}
 
    searchLocation(location: string): Observable < any > {
 
     return this.http.get(this.geolocate + "?address=" + location + "&key=" + this.key)
       .map(item => {
-        return item;
+        return item.json();
       });
 
 

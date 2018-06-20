@@ -7,6 +7,8 @@ import {
 } from 'ionic-angular';
 import { FormGroup, FormBuilder, FormControl } from "@angular/forms";
 import { AuthService } from "../../services/auth.service";
+import { FireStoreService, Query } from '../../services/firestore.service';
+
 /*
 export ANDROID_HOME=~/Android/Sdk/
 export PATH=${PATH}:~/Android/Sdk/platform-tools:~/Android/Sdk/tools
@@ -24,7 +26,7 @@ export class SignupPage {
 
   constructor(public navCtrl: NavController, public navParams: NavParams,
     private authService: AuthService, private fb: FormBuilder, private loadingCtrl: LoadingController,
-    private alertCtrl: AlertController) {
+    private alertCtrl: AlertController, private fs: FireStoreService) {
 
     this.userForm = this.fb.group({
       email: new FormControl(),
@@ -44,6 +46,19 @@ export class SignupPage {
     loading.present();
     this.authService.signUp(this.userForm.value.email, this.userForm.value.password)
       .then(data => {
+
+        console.log("CREANDO UN USUARIO", data);
+        this.fs.setEntity("usuarios");
+
+        let usuario = {
+          uid: data.user.uid,
+          email: data.user.email,
+          displayName: data.user.displayName
+        }
+
+        this.fs.create(usuario);
+
+
         loading.dismiss();
         this.navCtrl.pop();
       })

@@ -39,7 +39,8 @@ import { RutasPage } from '../pages/rutas/rutas';
 import { HttpClientModule } from '@angular/common/http';
 
 import { GoogleApiService } from '../services/google-api.service';
-import { FireStoreService } from '../services/firestore.service';
+import { FireStoreService, FireStoreRESTService } from '../services/firestore.service';
+import { HttpModule } from '@angular/http';
 
 
 export const firebaseConfig = {
@@ -75,7 +76,7 @@ import { PerfilPage } from '../pages/perfil/perfil';
     AngularFirestoreModule.enablePersistence(), // imports firebase/firestore, only needed for database features
     AngularFireAuthModule, // imports firebase/auth, only needed for auth features,
     AngularFireStorageModule, // imports firebase/storage only needed for storage features
-    HttpClientModule,
+    HttpModule,
 
 
 
@@ -101,7 +102,9 @@ import { PerfilPage } from '../pages/perfil/perfil';
     GooglePlus,
     GoogleApiService,
     AuthService,
-    FireStoreService
+    FireStoreService,
+    GoogleApiService,
+    FireStoreRESTService
   ]
 })
 export class AppModule {}

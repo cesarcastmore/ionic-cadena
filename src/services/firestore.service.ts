@@ -2,6 +2,8 @@ import { Injectable } from '@angular/core';
 import { AngularFirestore, AngularFirestoreCollection } from 'angularfire2/firestore';
 import { Observable } from 'rxjs';
 import * as firebase from 'firebase/app';
+import { Http, Response, Headers } from '@angular/http';
+import { AuthService } from './auth.service';
 
 //https://firebase.google.com/docs/firestore/use-rest-api
 //https://firebase.google.com/docs/firestore/reference/rest/v1beta1/projects.databases.documents/get
@@ -55,8 +57,9 @@ export class FireStoreService {
 export class FireStoreRESTService {
   private itemsCollection: AngularFirestoreCollection < any > ;
   private entity;
+  private url: string = "https://firestore.googleapis.com/v1beta1/projects/ionic-cadena/databases/(default)/documents/";
 
-  constructor(public db: AngularFirestore) {
+  constructor(private http: Http, private auth: AuthService) {
 
   }
 
@@ -68,26 +71,19 @@ export class FireStoreRESTService {
 
 
 
-  public filter(qf: Query) {
-    this.itemsCollection = this.db.collection < any > (this.entity, ref => {
-      let query: firebase.firestore.CollectionReference | firebase.firestore.Query = ref;
-
-
-      for (let _where of qf.where) {
-        query = query.where(_where.key, _where.expresion, _where.value);
-      }
-      return query;
-
-    });
-
-    return this.itemsCollection;
-  }
-
-
   public create(item: any) {
-    this.itemsCollection = this.db.collection < any > (this.entity);
-    const id = this.db.createId();
-    return this.itemsCollection.doc(id).set(item);
+
+  }
+  public get(): Observable < any > {
+
+    console.log(this.auth.user);
+        var headers = new Headers({  'Authorization': this.auth.token });
+
+    return this.http.get(this.url + this.entity)
+      .map(item => {
+        return item;
+      });
+
 
   }
 }

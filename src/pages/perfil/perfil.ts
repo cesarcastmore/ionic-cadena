@@ -37,15 +37,12 @@ export class PerfilPage {
 
 
     let query: Query = new Query();
-    query._where('F', '==', 'CESD');
+    query._where('uid', '==', this.perfil.uid);
 
     this.fs.filter(query).valueChanges().subscribe(data => {
       console.log(data);
 
     });
-
-
-    this.fs.create(this.perfil);
 
 
 

@@ -9,9 +9,20 @@ import { Observable } from 'rxjs';
 export class AuthService {
   public user: firebase.User;
 
+  public token: string;
+
   constructor(public afAuth: AngularFireAuth, public db: AngularFirestore) {
     afAuth.authState.subscribe(user => {
       this.user = user;
+
+
+
+      if (user) {
+        user.getIdToken().then((data) => {
+          console.log(data)
+          this.token = data;
+        });
+      }
     });
   }
 
@@ -35,9 +46,9 @@ export class AuthService {
   }
 
 
-   oauthSignIn(credential: any) {
-      return this.afAuth.auth.signInWithCredential(credential);
-    
+  oauthSignIn(credential: any) {
+    return this.afAuth.auth.signInWithCredential(credential);
+
   }
 
 }

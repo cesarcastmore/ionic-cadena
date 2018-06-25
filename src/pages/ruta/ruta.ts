@@ -4,6 +4,9 @@ import { FormBuilder, FormGroup, FormControl } from '@angular/forms';
 import { GoogleApiService } from "../../services/google-api.service";
 import { Ruta } from "../../model/ruta";
 import { Observable } from 'rxjs';
+import { FireStoreService, Query } from '../../services/firestore.service';
+import * as firebase from 'firebase/app';
+import { AuthService } from "../../services/auth.service";
 
 declare let google;
 
@@ -33,7 +36,9 @@ export class RutaPage {
 
   constructor(public navCtrl: NavController,
     private fb: FormBuilder,
-    private googleApi: GoogleApiService) {
+    private googleApi: GoogleApiService,
+    private fs: FireStoreService,
+    private auth: AuthService) {
 
     this.rutaForm = this.fb.group({
       origen: new FormControl(),
@@ -49,6 +54,8 @@ export class RutaPage {
 
   }
 
+
+//Funcion que carga el mapa
   public initMap() {
     this.map = new google.maps.Map(this.mapElement.nativeElement, {
       zoom: 7,
@@ -60,6 +67,7 @@ export class RutaPage {
 
   }
 
+//Funcion que guarda la direccion origen y el destino y imprime en el mapa
   public onLocation(location: any) {
 
 
@@ -91,7 +99,7 @@ export class RutaPage {
 
   }
 
-
+//FUncion para imprimir las indicaciones en el mapa
   public getDirections(): Observable < any > {
     return new Observable(observer => {
 
@@ -131,6 +139,24 @@ export class RutaPage {
       });
     });
 
+  }
+
+
+  public onSave(){
+    this.fs.setEntity('rutas');
+    let location_origen =  this.ruta.origen.geometry.location;
+    let location_destino =  this.ruta.destino.geometry.location;
+
+    let ruta = {
+      direccion_origen: this.ruta.origen.formatted_address,
+      cordenadas_origen: new firebase.firestore.GeoPoint(location_destino.lat, location_destino.lng),
+      direccion_destino: this.ruta.destino.formatted_address,
+      cordenadas_destino: new firebase.firestore.GeoPoint(location_destino.lat, location_destino.lng),
+      uid: this.auth.user.uid
+
+    }
+
+    this.fs.create(ruta);
   }
 
 }

@@ -8,17 +8,21 @@
     </ion-title>
   </ion-navbar>
 </ion-header>
-<ion-content padding>
+<ion-content padding  [formGroup]="perfilForm">
   <ion-list>
     <ion-item>
       <ion-label>Nombre </ion-label>
-      <ion-input type="text"></ion-input>
+      <ion-input type="text" formControlName="nombre"></ion-input>
     </ion-item>
     <ion-item>
       <ion-label>Apellido</ion-label>
-      <ion-input type="text"></ion-input>
+      <ion-input type="text" formControlName="apellido"></ion-input>
+    </ion-item>
+        <ion-item>
+      <ion-label>Correo</ion-label>
+      <ion-input type="text" formControlName="correo"></ion-input>
     </ion-item>
   </ion-list>
-  <button ion-button block menuToggle (click)="onLogout()">Guardar</button>
-  <button ion-button block menuToggle (click)="onLogout()">Cerrar Sesion</button>
+  <button ion-button block (click)="onUpdate()">Guardar</button>
+  <button ion-button block (click)="onLogout()">Cerrar Sesion</button>
 </ion-content>

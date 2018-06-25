@@ -52,8 +52,9 @@ export class SignupPage {
 
         let usuario = {
           uid: data.user.uid,
-          email: data.user.email,
-          displayName: data.user.displayName
+          correo: data.user.email,
+          nombre: null,
+          apellido: null
         }
 
         this.fs.create(usuario);

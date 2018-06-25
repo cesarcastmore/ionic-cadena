@@ -44,9 +44,23 @@ export class FireStoreService {
   public create(item: any) {
     this.itemsCollection = this.db.collection < any > (this.entity);
     const id = this.db.createId();
+    item['id']= id;
     return this.itemsCollection.doc(id).set(item);
 
   }
+
+  public update(item: any) {
+    this.itemsCollection = this.db.collection < any > (this.entity);
+    return this.itemsCollection.doc(item.id).set(
+      item, {
+      merge: true 
+    });
+
+    
+
+  }
+
+
 }
 
 

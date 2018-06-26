@@ -147,7 +147,16 @@ export class RutaPage {
     let location_origen =  this.ruta.origen.geometry.location;
     let location_destino =  this.ruta.destino.geometry.location;
 
+    let nombre = this.getCity(this.ruta.origen.address_components) + ' - '+this.getCity(this.ruta.destino.address_components)
+
+
+
+
+
+    console.log(this.ruta.origen);
+
     let ruta = {
+      nombre: nombre,
       direccion_origen: this.ruta.origen.formatted_address,
       cordenadas_origen: new firebase.firestore.GeoPoint(location_destino.lat, location_destino.lng),
       direccion_destino: this.ruta.destino.formatted_address,
@@ -157,6 +166,21 @@ export class RutaPage {
     }
 
     this.fs.create(ruta);
+  }
+
+
+
+
+  public getCity(components: any[]){
+
+    for(let component of components){
+      for(let type of  component.types){
+        if(type == "locality"){
+          return component.long_name;
+        }
+      }
+    }
+
   }
 
 }

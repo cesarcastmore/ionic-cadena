@@ -45,4 +45,10 @@ export class RutasPage {
   }
 
 
+
+  public onRemove(item: any){
+    this.fs.remove(item);
+  }
+
+
 }

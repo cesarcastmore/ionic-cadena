@@ -56,9 +56,14 @@ export class FireStoreService {
       merge: true 
     });
 
-    
-
   }
+
+
+
+    public remove(item: any){
+      this.itemsCollection = this.db.collection < any > (this.entity);
+      this.itemsCollection.doc(item.id).delete();
+    }
 
 
 }

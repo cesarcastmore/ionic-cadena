@@ -9,15 +9,17 @@
     <ion-title>solicitud</ion-title>
   </ion-navbar>
 </ion-header>
-<ion-content>
+<ion-content [formGroup]="solicitudForm">
   <ion-item>
     <ion-label color="primary">Destino</ion-label>
-    <ion-input type="date"></ion-input>
+    <ion-input type="date" formControlName="fecha_inicio"></ion-input>
   </ion-item>
   <ion-item>
     <ion-label>Rutas</ion-label>
-    <ion-select [(ngModel)]="selectedRuta" multiple="false">
-      <ion-option *ngFor="let ruta of rutas">{{ruta.municipio_origen }} - {{ruta.municipio_destino }}</ion-option>
+    <ion-select formControlName="ruta_id" multiple="false">
+      <ion-option *ngFor="let ruta of rutas" [value]="ruta.id">{{ruta.municipio_origen }} - {{ruta.municipio_destino }}</ion-option>
     </ion-select>
   </ion-item>
+    <button ion-button block (click)="onSave()">Guardar</button>
+
 </ion-content>

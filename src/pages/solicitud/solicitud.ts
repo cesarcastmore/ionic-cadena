@@ -2,6 +2,7 @@ import { Component } from '@angular/core';
 import { NavController } from 'ionic-angular';
 import { AuthService } from "../../services/auth.service";
 import { FireStoreService, Query } from '../../services/firestore.service';
+import { FormBuilder, FormGroup, FormControl } from '@angular/forms';
 
 
 /**
@@ -18,12 +19,19 @@ import { FireStoreService, Query } from '../../services/firestore.service';
 export class SolicitudPage {
 
   public rutas: any[];
-  public selectedRuta: any;
-
+  public solicitudForm: FormGroup;
+W
 
   constructor(public navCtrl: NavController,
     private fs: FireStoreService,
-    private auth: AuthService) {
+    private auth: AuthService, 
+    private fb:FormBuilder) {
+
+  	this.solicitudForm= this.fb.group({
+  		fecha_inicio: new FormControl(),
+  		ruta_id: new FormControl(), 
+  		uid: new FormControl(this.auth.user.uid)
+  	});
 
   }
 
@@ -37,6 +45,16 @@ export class SolicitudPage {
     this.fs.filter(query).valueChanges().subscribe(data => {
       this.rutas = data;
     });
+
+  }
+
+
+
+  public onSave(){
+    this.fs.setEntity('solicitudes');
+
+    this.fs.create(this.solicitudForm.value);
+
 
   }
 

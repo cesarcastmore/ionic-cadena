@@ -14,4 +14,10 @@
     <ion-label color="primary">Destino</ion-label>
     <ion-input type="date"></ion-input>
   </ion-item>
+  <ion-item>
+    <ion-label>Rutas</ion-label>
+    <ion-select [(ngModel)]="selectedRuta" multiple="false">
+      <ion-option *ngFor="let ruta of rutas">{{ruta.municipio_origen }} - {{ruta.municipio_destino }}</ion-option>
+    </ion-select>
+  </ion-item>
 </ion-content>

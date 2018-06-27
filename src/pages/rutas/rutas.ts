@@ -18,7 +18,7 @@ import { RutaPage } from '../ruta/ruta';
 export class RutasPage {
 
   private rutaPage = RutaPage;
-  public rutas: any[]= [];
+  public rutas: any[] = [];
 
   constructor(public navCtrl: NavController,
     public navParams: NavParams,
@@ -38,16 +38,36 @@ export class RutasPage {
     query._where('uid', '==', this.auth.user.uid);
 
     this.fs.filter(query).valueChanges().subscribe(data => {
-
-    	this.rutas= data;
+      this.rutas = data;
     });
 
   }
 
 
 
-  public onRemove(item: any){
+  public onRemove(item: any) {
     this.fs.remove(item);
+  }
+
+
+  public onEdit(item: any) {
+    this.navCtrl.push(this.rutaPage, {
+      item: {
+        id: item.id,
+        origen: {
+          lat: item.cordenadas_origen._lat,
+          lng: item.cordenadas_origen._long,
+        },
+        destino: {
+          lat: item.cordenadas_destino._lat,
+          lng: item.cordenadas_destino._long
+        },
+        direccion_origen: item.direccion_origen,
+        direccion_destino: item.direccion_destino
+
+      }
+    });
+
   }
 
 

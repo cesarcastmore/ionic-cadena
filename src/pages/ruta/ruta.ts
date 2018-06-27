@@ -1,5 +1,5 @@
 import { Component, ViewChild, ElementRef } from '@angular/core';
-import { NavController } from 'ionic-angular';
+import { NavController, NavParams } from 'ionic-angular';
 import { FormBuilder, FormGroup, FormControl } from '@angular/forms';
 import { GoogleApiService } from "../../services/google-api.service";
 import { Ruta } from "../../model/ruta";
@@ -38,12 +38,12 @@ export class RutaPage {
     private fb: FormBuilder,
     private googleApi: GoogleApiService,
     private fs: FireStoreService,
-    private auth: AuthService) {
+    private auth: AuthService,
+    public navParams: NavParams) {
 
     this.rutaForm = this.fb.group({
       origen: new FormControl(),
       destino: new FormControl()
-
     });
 
   }
@@ -51,11 +51,35 @@ export class RutaPage {
   public ionViewDidLoad() {
     this.initMap();
     this.changeForm();
+    this.getRutaIfExists();
 
   }
 
 
-//Funcion que carga el mapa
+
+  public getRutaIfExists() {
+    let paramRuta = this.navParams.get("item");
+
+    if (paramRuta) {
+      this.rutaForm.patchValue({
+        origen: paramRuta.direccion_origen,
+        destino: paramRuta.direccion_destino
+      });
+
+      console.log(paramRuta);
+
+
+      this.getDirections(paramRuta.origen,paramRuta.destino).subscribe(response => {
+        console.log(response);
+        this.directionsDisplay.setDirections(response);
+      });
+
+    }
+
+  }
+
+
+  //Funcion que carga el mapa
   public initMap() {
     this.map = new google.maps.Map(this.mapElement.nativeElement, {
       zoom: 7,
@@ -67,7 +91,7 @@ export class RutaPage {
 
   }
 
-//Funcion que guarda la direccion origen y el destino y imprime en el mapa
+  //Funcion que guarda la direccion origen y el destino y imprime en el mapa
   public onLocation(location: any) {
 
 
@@ -88,7 +112,8 @@ export class RutaPage {
 
     if (this.ruta.origen && this.ruta.destino) {
 
-      this.getDirections().subscribe(response => {
+      this.getDirections(this.ruta.origen.geometry.location,
+        this.ruta.destino.geometry.location).subscribe(response => {
         this.directionsDisplay.setDirections(response);
       });
 
@@ -99,17 +124,24 @@ export class RutaPage {
 
   }
 
-//FUncion para imprimir las indicaciones en el mapa
-  public getDirections(): Observable < any > {
+
+
+  //FUncion para imprimir las indicaciones en el mapa
+  public getDirections(origen: any, destino: any): Observable < any > {
+
+console.log("origen" , origen)
+console.log("destino" , destino)
+
     return new Observable(observer => {
 
       let directionsService = new google.maps.DirectionsService;
 
       directionsService.route({
-        origin: this.ruta.origen.geometry.location,
-        destination: this.ruta.destino.geometry.location,
+        origin: origen,
+        destination: destino,
         travelMode: 'WALKING'
       }, function(response, status) {
+        console.log(status);
 
         observer.next(response);
         observer.complete();
@@ -121,7 +153,7 @@ export class RutaPage {
 
   }
 
-
+  //funcion para detectar cambio en el formulario
   public changeForm(): void {
     this.rutaForm.get('origen').valueChanges.subscribe(val => {
       this.googleApi.searchLocation(val).subscribe(data => {
@@ -142,23 +174,17 @@ export class RutaPage {
   }
 
 
-  public onSave(){
+  public onSave() {
     this.fs.setEntity('rutas');
-    let location_origen =  this.ruta.origen.geometry.location;
-    let location_destino =  this.ruta.destino.geometry.location;
+    let location_origen = this.ruta.origen.geometry.location;
+    let location_destino = this.ruta.destino.geometry.location;
 
-    let nombre = this.getCity(this.ruta.origen.address_components) + ' - '+this.getCity(this.ruta.destino.address_components)
-
-
-
-
-
-    console.log(this.ruta.origen);
+    let nombre = this.getCity(this.ruta.origen.address_components) + ' - ' + this.getCity(this.ruta.destino.address_components)
 
     let ruta = {
       nombre: nombre,
       direccion_origen: this.ruta.origen.formatted_address,
-      cordenadas_origen: new firebase.firestore.GeoPoint(location_destino.lat, location_destino.lng),
+      cordenadas_origen: new firebase.firestore.GeoPoint(location_origen.lat, location_origen.lng),
       direccion_destino: this.ruta.destino.formatted_address,
       cordenadas_destino: new firebase.firestore.GeoPoint(location_destino.lat, location_destino.lng),
       uid: this.auth.user.uid
@@ -166,16 +192,18 @@ export class RutaPage {
     }
 
     this.fs.create(ruta);
+
+    this.navCtrl.pop();
   }
 
 
 
 
-  public getCity(components: any[]){
+  public getCity(components: any[]) {
 
-    for(let component of components){
-      for(let type of  component.types){
-        if(type == "locality"){
+    for (let component of components) {
+      for (let type of component.types) {
+        if (type == "locality") {
           return component.long_name;
         }
       }

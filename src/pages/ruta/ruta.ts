@@ -27,9 +27,26 @@ export class RutaPage {
   @ViewChild('map') mapElement: ElementRef;
   public map: any;
   public rutaForm: FormGroup;
-  public locations: any;
+
+
   public changePoint: string;
-  public ruta: Ruta = new Ruta();
+  public locations: any;
+
+  public direccion_origen: string;
+  public direccion_destino: string;
+
+  public coordenadas_origen: any;
+  public coordenadas_destino: any;
+
+  public info_origen: any;
+  public info_destino: any;
+
+  public municipio_origen: string;
+  public municipio_destino: string;
+
+
+  public id: string;
+
 
   public directionsDisplay
 
@@ -66,13 +83,21 @@ export class RutaPage {
         destino: paramRuta.direccion_destino
       });
 
-      console.log(paramRuta);
+      this.direccion_origen = paramRuta.direccion_origen;
+      this.direccion_destino = paramRuta.direccion_destino;
+
+      this.coordenadas_origen = paramRuta.origen;
+      this.coordenadas_destino = paramRuta.destino;
+      this.id = paramRuta.id;
+      this.municipio_origen = paramRuta.municipio_origen,
+        this.municipio_destino = paramRuta.municipio_destino,
+        console.log()
+
+        this.getDirections(this.coordenadas_origen, this.coordenadas_destino).subscribe(response => {
 
 
-      this.getDirections(paramRuta.origen,paramRuta.destino).subscribe(response => {
-        console.log(response);
-        this.directionsDisplay.setDirections(response);
-      });
+          this.directionsDisplay.setDirections(response);
+        });
 
     }
 
@@ -98,22 +123,32 @@ export class RutaPage {
     this.rutaForm.markAsPristine();
 
     if (this.changePoint == 'origen') {
+
+      this.direccion_origen = location.formatted_address;
+
       this.rutaForm.patchValue({
-        origen: location.formatted_address
+        origen: this.direccion_origen
       });
-      this.ruta.origen = location;
+      this.info_origen = location;
+      this.coordenadas_origen = location.geometry.location;
+      this.municipio_origen = this.getCity(location.address_components);
 
     } else if (this.changePoint == 'destino') {
+
+      this.direccion_destino = location.formatted_address;
       this.rutaForm.patchValue({
-        destino: location.formatted_address
+        destino: this.direccion_destino
       });
-      this.ruta.destino = location;
+      this.info_destino = location;
+      this.coordenadas_destino = location.geometry.location;
+      this.municipio_destino = this.getCity(location.address_components);
+
     }
 
-    if (this.ruta.origen && this.ruta.destino) {
+    if (this.direccion_origen && this.direccion_destino) {
 
-      this.getDirections(this.ruta.origen.geometry.location,
-        this.ruta.destino.geometry.location).subscribe(response => {
+      this.getDirections(this.coordenadas_origen,
+        this.coordenadas_destino).subscribe(response => {
         this.directionsDisplay.setDirections(response);
       });
 
@@ -129,9 +164,6 @@ export class RutaPage {
   //FUncion para imprimir las indicaciones en el mapa
   public getDirections(origen: any, destino: any): Observable < any > {
 
-console.log("origen" , origen)
-console.log("destino" , destino)
-
     return new Observable(observer => {
 
       let directionsService = new google.maps.DirectionsService;
@@ -141,8 +173,6 @@ console.log("destino" , destino)
         destination: destino,
         travelMode: 'WALKING'
       }, function(response, status) {
-        console.log(status);
-
         observer.next(response);
         observer.complete();
 
@@ -157,7 +187,6 @@ console.log("destino" , destino)
   public changeForm(): void {
     this.rutaForm.get('origen').valueChanges.subscribe(val => {
       this.googleApi.searchLocation(val).subscribe(data => {
-        console.log(data);
         this.locations = data.results;
         this.changePoint = 'origen';
       });
@@ -176,22 +205,25 @@ console.log("destino" , destino)
 
   public onSave() {
     this.fs.setEntity('rutas');
-    let location_origen = this.ruta.origen.geometry.location;
-    let location_destino = this.ruta.destino.geometry.location;
 
-    let nombre = this.getCity(this.ruta.origen.address_components) + ' - ' + this.getCity(this.ruta.destino.address_components)
 
     let ruta = {
-      nombre: nombre,
-      direccion_origen: this.ruta.origen.formatted_address,
-      cordenadas_origen: new firebase.firestore.GeoPoint(location_origen.lat, location_origen.lng),
-      direccion_destino: this.ruta.destino.formatted_address,
-      cordenadas_destino: new firebase.firestore.GeoPoint(location_destino.lat, location_destino.lng),
-      uid: this.auth.user.uid
-
+      direccion_origen: this.direccion_origen,
+      coordenadas_origen: new firebase.firestore.GeoPoint(this.coordenadas_origen.lat, this.coordenadas_destino.lng),
+      direccion_destino: this.direccion_destino,
+      coordenadas_destino: new firebase.firestore.GeoPoint(this.coordenadas_destino.lat, this.coordenadas_destino.lng),
+      uid: this.auth.user.uid,
+      municipio_origen: this.municipio_origen,
+      municipio_destino: this.municipio_destino
     }
 
-    this.fs.create(ruta);
+
+    if (this.id) {
+      ruta['id'] = this.id;
+      this.fs.update(ruta);
+    } else {
+      this.fs.create(ruta);
+    }
 
     this.navCtrl.pop();
   }

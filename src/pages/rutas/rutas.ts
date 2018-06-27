@@ -55,15 +55,18 @@ export class RutasPage {
       item: {
         id: item.id,
         origen: {
-          lat: item.cordenadas_origen._lat,
-          lng: item.cordenadas_origen._long,
+          lat: item.coordenadas_origen._lat,
+          lng: item.coordenadas_origen._long,
         },
         destino: {
-          lat: item.cordenadas_destino._lat,
-          lng: item.cordenadas_destino._long
+          lat: item.coordenadas_destino._lat,
+          lng: item.coordenadas_destino._long
         },
         direccion_origen: item.direccion_origen,
-        direccion_destino: item.direccion_destino
+        direccion_destino: item.direccion_destino,
+        municipio_origen: item.municipio_origen,
+        municipio_destino: item.municipio_destino,
+
 
       }
     });

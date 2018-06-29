@@ -20,18 +20,23 @@ export class SolicitudPage {
 
   public rutas: any[];
   public solicitudForm: FormGroup;
-W
+  W
 
   constructor(public navCtrl: NavController,
     private fs: FireStoreService,
-    private auth: AuthService, 
-    private fb:FormBuilder) {
+    private auth: AuthService,
+    private fb: FormBuilder) {
 
-  	this.solicitudForm= this.fb.group({
-  		fecha_inicio: new FormControl(),
-  		ruta_id: new FormControl(), 
-  		uid: new FormControl(this.auth.user.uid)
-  	});
+    this.solicitudForm = this.fb.group({
+      fecha_inicio: new FormControl(),
+      ruta_id: new FormControl(),
+      uid: new FormControl(this.auth.user.uid),
+      municipio_origen: new FormControl(),
+      municipio_destino: new FormControl()
+
+    });
+
+    this.updateMunicipios();
 
   }
 
@@ -41,7 +46,6 @@ W
 
     let query: Query = new Query();
     query._where('uid', '==', this.auth.user.uid);
-
     this.fs.filter(query).valueChanges().subscribe(data => {
       this.rutas = data;
     });
@@ -49,11 +53,32 @@ W
   }
 
 
+  public updateMunicipios() {
+    this.solicitudForm.get('ruta_id').valueChanges.subscribe(ruta_id => {
+      let ruta: any = this.rutas.find(r => 
+      {
+        console.log("R", r);
+        if (r.id == ruta_id) {
+          console.log("R", r);
+          return r;
+        }
+      })
 
-  public onSave(){
+      this.solicitudForm.patchValue({
+        municipio_origen: ruta.municipio_origen,
+        municipio_destino: ruta.municipio_destino
+      })
+
+    });
+  }
+
+
+
+  public onSave() {
     this.fs.setEntity('solicitudes');
 
     this.fs.create(this.solicitudForm.value);
+    this.navCtrl.pop();
 
 
   }

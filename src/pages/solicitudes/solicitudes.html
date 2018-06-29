@@ -13,4 +13,30 @@
   </ion-navbar>
 </ion-header>
 <ion-content padding>
+   <ion-card *ngFor="let solicitud of solicitudes">
+    <ion-item>
+    </ion-item>
+    <ion-card-content>
+      <h3 class="titulo_ruta">Fecha</h3>
+      <p>{{solicitud.fecha_inicio}}</p>
+      <h3 class="titulo_ruta">Origen</h3>
+      <p>{{solicitud.origen}}</p>
+      <h3 class="titulo_ruta">Destino</h3>
+      <p>{{solicitud.destino}}</p>
+    </ion-card-content>
+    <ion-row>
+      <ion-col>
+        <button (click)="onEdit(ruta)" ion-button icon-start clear small>
+          <ion-icon name="create"></ion-icon>
+          <div>Editar</div>
+        </button>
+      </ion-col>
+      <ion-col>
+        <button ion-button icon-start clear small (click)="onRemove(ruta)">
+          <ion-icon name="trash"></ion-icon>
+          <div>Borrar</div>
+        </button>
+      </ion-col>
+    </ion-row>
+  </ion-card>
 </ion-content>

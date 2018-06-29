@@ -10,12 +10,12 @@ import { AuthService } from "../../services/auth.service";
 })
 
 export class SolicitudesPage {
-	private solicitudPage= SolicitudPage;
+  private solicitudPage = SolicitudPage;
 
-	public solicitudes: any[];
+  public solicitudes: any[];
 
   constructor(public navCtrl: NavController,
-  	   private fs: FireStoreService,
+    private fs: FireStoreService,
     private auth: AuthService) {
 
 
@@ -33,11 +33,25 @@ export class SolicitudesPage {
 
   }
 
-
-
   public openSolicitud() {
-
     this.navCtrl.push(this.solicitudPage);
+  }
+
+  public onRemove(solicitud: any) {
+    this.fs.remove(solicitud);
+  }
+
+  public onEdit(solicitud: any) {
+    this.navCtrl.push(this.solicitudPage, {
+      item:{
+        id: solicitud.id,
+        uid: solicitud.uid,
+        municipio_origen: solicitud.municipio_origen,
+        municipio_destino: solicitud.municipio_destino, 
+        ruta_id: solicitud.ruta_id
+      }
+
+    })
   }
 
 }

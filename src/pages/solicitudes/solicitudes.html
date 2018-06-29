@@ -1,28 +1,37 @@
 <ion-header>
-  <ion-navbar>
+  <ion-navbar color="primary">
     <button ion-button menuToggle icon-only>
       <ion-icon name='menu'></ion-icon>
     </button>
     <ion-buttons end>
       <button ion-button icon-only (click)="openSolicitud()">
-        <ion-icon name="add" ></ion-icon>
+        <ion-icon name="add"></ion-icon>
       </button>
     </ion-buttons>
     <ion-title>
       Solicitudes </ion-title>
   </ion-navbar>
 </ion-header>
-<ion-content padding>
-   <ion-card *ngFor="let solicitud of solicitudes">
+<ion-content padding class="color-backgroud">
+  <ion-card *ngFor="let solicitud of solicitudes" class="shape">
     <ion-item>
     </ion-item>
     <ion-card-content>
-      <h3 class="titulo_ruta">Fecha</h3>
+      <ion-grid>
+        <ion-row>
+          <ion-col col-6 text-left>
+            <h3 class="titulo">Origen</h3>
+            <p>{{solicitud.municipio_origen}}</p>
+            <h3 class="titulo">Fecha</h3>
       <p>{{solicitud.fecha_inicio}}</p>
-      <h3 class="titulo_ruta">Origen</h3>
-      <p>{{solicitud.origen}}</p>
-      <h3 class="titulo_ruta">Destino</h3>
-      <p>{{solicitud.destino}}</p>
+          </ion-col>
+          <ion-col col-6 text-right>
+            <h3 class="titulo">Destino</h3>
+            <p>{{solicitud.municipio_destino}}</p>
+          </ion-col>
+        </ion-row>
+      </ion-grid>
+      
     </ion-card-content>
     <ion-row>
       <ion-col>

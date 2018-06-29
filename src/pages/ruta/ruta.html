@@ -5,17 +5,16 @@
   Ionic pages and navigation.
 -->
 <ion-header>
-  <ion-navbar>
-          <ion-buttons end>
+  <ion-navbar color="primary">
+    <ion-buttons end>
       <button ion-button icon-only (click)="onSave()">
         <ion-icon name="checkmark-circle"></ion-icon>
       </button>
     </ion-buttons>
     <ion-title>Ruta</ion-title>
   </ion-navbar>
-
 </ion-header>
-<ion-content [formGroup]="rutaForm">
+<ion-content [formGroup]="rutaForm"  class="color-backgroud">
   <ion-list>
     <ion-item>
       <ion-label color="primary">Origen</ion-label>
@@ -28,8 +27,8 @@
   </ion-list>
   <div #map id="map" [class.hide_map]="!rutaForm.pristine"></div>
   <ion-list>
-    <button ion-item (click)="onLocation(location)" *ngFor="let location of locations" >
-      {{location.formatted_address}} 
+    <button ion-item (click)="onLocation(location)" *ngFor="let location of locations">
+      {{location.formatted_address}}
     </button>
   </ion-list>
 </ion-content>

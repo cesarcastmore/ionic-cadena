@@ -87,7 +87,6 @@ export class SolicitudPage {
 
   public onSave() {
     this.fs.setEntity('solicitudes');
-
     if (this.id) {
       this.fs.update(this.solicitudForm.value);
 

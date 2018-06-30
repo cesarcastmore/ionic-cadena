@@ -41,6 +41,7 @@ import { HttpClientModule } from '@angular/common/http';
 import { GoogleApiService } from '../services/google-api.service';
 import { FireStoreService, FireStoreRESTService } from '../services/firestore.service';
 import { HttpModule } from '@angular/http';
+import { Geolocation } from '@ionic-native/geolocation';
 
 
 export const firebaseConfig = {
@@ -104,7 +105,8 @@ import { PerfilPage } from '../pages/perfil/perfil';
     AuthService,
     FireStoreService,
     GoogleApiService,
-    FireStoreRESTService
+    FireStoreRESTService,
+    Geolocation
   ]
 })
 export class AppModule {}

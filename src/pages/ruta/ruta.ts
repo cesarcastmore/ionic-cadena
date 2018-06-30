@@ -7,6 +7,7 @@ import { Observable } from 'rxjs';
 import { FireStoreService, Query } from '../../services/firestore.service';
 import * as firebase from 'firebase/app';
 import { AuthService } from "../../services/auth.service";
+import { Geolocation } from '@ionic-native/geolocation';
 
 declare let google;
 
@@ -56,7 +57,8 @@ export class RutaPage {
     private googleApi: GoogleApiService,
     private fs: FireStoreService,
     private auth: AuthService,
-    public navParams: NavParams) {
+    public navParams: NavParams,
+    private geolocation: Geolocation) {
 
     this.rutaForm = this.fb.group({
       origen: new FormControl(),
@@ -93,11 +95,11 @@ export class RutaPage {
         this.municipio_destino = paramRuta.municipio_destino,
         console.log()
 
-        this.getDirections(this.coordenadas_origen, this.coordenadas_destino).subscribe(response => {
+      this.getDirections(this.coordenadas_origen, this.coordenadas_destino).subscribe(response => {
 
 
-          this.directionsDisplay.setDirections(response);
-        });
+        this.directionsDisplay.setDirections(response);
+      });
 
     }
 
@@ -106,18 +108,25 @@ export class RutaPage {
 
   //Funcion que carga el mapa
   public initMap() {
-    this.map = new google.maps.Map(this.mapElement.nativeElement, {
-      zoom: 7,
-      center: { lat: 41.85, lng: -87.65 }
-    });
+    this.geolocation.getCurrentPosition().then((resp) => {
 
-    this.directionsDisplay = new google.maps.DirectionsRenderer({ map: this.map });
+      this.map = new google.maps.Map(this.mapElement.nativeElement, {
+        zoom: 7,
+        center: { lat: resp.coords.latitude, lng: resp.coords.longitude}
+      });
+
+      this.directionsDisplay = new google.maps.DirectionsRenderer({ map: this.map });
+    }).catch((error) => {
+      console.log('Error getting location', error);
+    });
 
 
   }
 
   //Funcion que guarda la direccion origen y el destino y imprime en el mapa
   public onLocation(location: any) {
+
+    console.log("LOCATION", location);
 
 
     this.rutaForm.markAsPristine();
@@ -171,7 +180,7 @@ export class RutaPage {
       directionsService.route({
         origin: origen,
         destination: destino,
-        travelMode: 'WALKING'
+        travelMode: 'DRIVING'
       }, function(response, status) {
         observer.next(response);
         observer.complete();
@@ -187,6 +196,8 @@ export class RutaPage {
   public changeForm(): void {
     this.rutaForm.get('origen').valueChanges.subscribe(val => {
       this.googleApi.searchLocation(val).subscribe(data => {
+
+        console.log(data);
         this.locations = data.results;
         this.changePoint = 'origen';
       });
@@ -194,6 +205,7 @@ export class RutaPage {
 
     this.rutaForm.get('destino').valueChanges.subscribe(val => {
       this.googleApi.searchLocation(val).subscribe(data => {
+        console.log("IMPRIMIENTO ESTO", data)
         this.locations = data.results;
         this.changePoint = 'destino';
 

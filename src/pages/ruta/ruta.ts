@@ -2,9 +2,8 @@ import { Component, ViewChild, ElementRef } from '@angular/core';
 import { NavController, NavParams } from 'ionic-angular';
 import { FormBuilder, FormGroup, FormControl } from '@angular/forms';
 import { GoogleApiService } from "../../services/google-api.service";
-import { Ruta } from "../../model/ruta";
 import { Observable } from 'rxjs';
-import { FireStoreService, Query } from '../../services/firestore.service';
+import { FireStoreService } from '../../services/firestore.service';
 import * as firebase from 'firebase/app';
 import { AuthService } from "../../services/auth.service";
 import { Geolocation } from '@ionic-native/geolocation';
@@ -92,12 +91,9 @@ export class RutaPage {
       this.coordenadas_destino = paramRuta.destino;
       this.id = paramRuta.id;
       this.municipio_origen = paramRuta.municipio_origen,
-        this.municipio_destino = paramRuta.municipio_destino,
-        console.log()
+      this.municipio_destino = paramRuta.municipio_destino,
 
       this.getDirections(this.coordenadas_origen, this.coordenadas_destino).subscribe(response => {
-
-
         this.directionsDisplay.setDirections(response);
       });
 
@@ -108,14 +104,21 @@ export class RutaPage {
 
   //Funcion que carga el mapa
   public initMap() {
+
+    this.map = new google.maps.Map(this.mapElement.nativeElement, {
+      zoom: 7,
+      center: { lat: 41.85, lng: -87.65 }
+    });
+
+    this.directionsDisplay = new google.maps.DirectionsRenderer({ map: this.map });
+
+
     this.geolocation.getCurrentPosition().then((resp) => {
+      console.log(resp.coords.latitude);
+      console.log(resp.coords.longitude);
+      this.map.setCenter(new google.maps.LatLng(resp.coords.latitude, resp.coords.longitude));
 
-      this.map = new google.maps.Map(this.mapElement.nativeElement, {
-        zoom: 7,
-        center: { lat: resp.coords.latitude, lng: resp.coords.longitude}
-      });
 
-      this.directionsDisplay = new google.maps.DirectionsRenderer({ map: this.map });
     }).catch((error) => {
       console.log('Error getting location', error);
     });
@@ -125,8 +128,6 @@ export class RutaPage {
 
   //Funcion que guarda la direccion origen y el destino y imprime en el mapa
   public onLocation(location: any) {
-
-    console.log("LOCATION", location);
 
 
     this.rutaForm.markAsPristine();

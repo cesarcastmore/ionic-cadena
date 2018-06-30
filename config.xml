@@ -85,6 +85,13 @@
     <plugin name="cordova-plugin-splashscreen" spec="5.0.2" />
     <plugin name="cordova-plugin-ionic-webview" spec="1.1.19" />
     <plugin name="cordova-plugin-ionic-keyboard" spec="2.0.5" />
+    <allow-navigation href="http://192.168.0.110:8100" />
+    <allow-navigation href="http://192.168.0.111:8100" />
+    <plugin name="cordova-plugin-whitelist" spec="https://github.com/apache/cordova-plugin-whitelist.git" />
+    <plugin name="cordova-plugin-geolocation" spec="^4.0.1">
+        <variable name="GEOLOCATION_USAGE_DESCRIPTION" value="To locate you" />
+    </plugin>
+    <engine name="android" spec="7.0.0" />
     <plugin name="cordova-plugin-facebook4" spec="^2.1.0">
         <variable name="APP_ID" value="437270240078655" />
         <variable name="APP_NAME" value="ionic-cadena" />
@@ -92,12 +99,5 @@
     </plugin>
     <plugin name="cordova-plugin-googleplus" spec="^5.3.0">
         <variable name="REVERSED_CLIENT_ID" value="627434895894-agnmqvlptc9f5r84uh3indcf40puua60.apps.googleusercontent.com" />
-    </plugin>
-    <allow-navigation href="http://192.168.0.110:8100" />
-    <allow-navigation href="http://192.168.0.111:8100" />
-    <engine name="android" spec="7.0.0" />
-    <plugin name="cordova-plugin-whitelist" spec="https://github.com/apache/cordova-plugin-whitelist.git" />
-    <plugin name="cordova-plugin-geolocation" spec="^4.0.1">
-        <variable name="GEOLOCATION_USAGE_DESCRIPTION" value="To locate you" />
     </plugin>
 </widget>

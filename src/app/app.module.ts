@@ -11,7 +11,15 @@ https://www.firebase.com/docs/web/libraries/angular/api.html
 LIFECYCLE LIFE
 https://blog.ionicframework.com/navigating-lifecycle-events/
 http://www.ionichelper.com/2016/10/11/ionic-2-components-quick-guide-series-app/
+
+
+PLUGIN
+
+ionic cordova plugin add cordova-plugin-facebook4 --save --variable APP_ID="437270240078655" --variable APP_NAME="ionic-cadena"
+ionic cordova plugin add cordova-plugin-googleplus --variable REVERSED_CLIENT_ID="627434895894-agnmqvlptc9f5r84uh3indcf40puua60.apps.googleusercontent.com"
 */
+
+
 
 import { BrowserModule } from '@angular/platform-browser';
 import { ErrorHandler, NgModule } from '@angular/core';

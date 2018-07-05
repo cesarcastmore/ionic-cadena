@@ -43,13 +43,7 @@ export class SolicitudesPage {
 
   public onEdit(solicitud: any) {
     this.navCtrl.push(this.solicitudPage, {
-      item:{
-        id: solicitud.id,
-        uid: solicitud.uid,
-        municipio_origen: solicitud.municipio_origen,
-        municipio_destino: solicitud.municipio_destino, 
-        ruta_id: solicitud.ruta_id
-      }
+      item: solicitud
 
     })
   }

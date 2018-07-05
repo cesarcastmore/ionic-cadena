@@ -28,23 +28,29 @@ export class SolicitudPage {
     private fb: FormBuilder,
     public navParams: NavParams) {
 
+//Inicializando el formulario
     this.solicitudForm = this.fb.group({
-      fecha_inicio: new FormControl(),
+      fecha_inicio: new FormControl(new Date().toJSON()),
       ruta_id: new FormControl(),
       uid: new FormControl(this.auth.user.uid),
       municipio_origen: new FormControl(),
       municipio_destino: new FormControl(),
       id: new FormControl()
-
     });
 
+//Obteniendo el parametros
     let item = this.navParams.get("item");
 
     if (item) {
-      this.id = item.id;
-      this.solicitudForm.patchValue(item);
-    }
+      console.log(item);
 
+      this.id = item.id;
+      item['ruta_id'] = item.ruta.id;
+      this.solicitudForm.patchValue(item);
+
+
+
+    }
 
 
 
@@ -65,12 +71,11 @@ export class SolicitudPage {
   }
 
 
+//Cambia los municipio al selecionarlos
   public updateMunicipios() {
     this.solicitudForm.get('ruta_id').valueChanges.subscribe(ruta_id => {
       let ruta: any = this.rutas.find(r => {
-        console.log("R", r);
         if (r.id == ruta_id) {
-          console.log("R", r);
           return r;
         }
       })
@@ -87,11 +92,19 @@ export class SolicitudPage {
 
   public onSave() {
     this.fs.setEntity('solicitudes');
+
+    let solicitud = this.solicitudForm.value;
+
+    let ruta = this.fs.createReference('rutas', solicitud.ruta_id);
+    delete solicitud.ruta_id;
+    solicitud['ruta'] = ruta;
+
+
     if (this.id) {
       this.fs.update(this.solicitudForm.value);
-
     } else {
-      this.fs.update(this.solicitudForm.value);
+      console.log("guardar");
+      this.fs.create(solicitud);
 
     }
 

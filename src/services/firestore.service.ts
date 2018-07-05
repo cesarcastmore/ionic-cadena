@@ -24,7 +24,6 @@ export class FireStoreService {
   }
 
 
-
   public filter(qf: Query) {
     this.itemsCollection = this.db.collection < any > (this.entity, ref => {
       let query: firebase.firestore.CollectionReference | firebase.firestore.Query = ref;
@@ -41,10 +40,16 @@ export class FireStoreService {
   }
 
 
+  public createReference(entity: string, id: string){
+    this.itemsCollection = this.db.collection < any > (entity);
+    return this.itemsCollection.doc(id).ref;
+  }
+
+
   public create(item: any) {
     this.itemsCollection = this.db.collection < any > (this.entity);
     const id = this.db.createId();
-    item['id']= id;
+    item['id'] = id;
     return this.itemsCollection.doc(id).set(item);
 
   }
@@ -53,17 +58,17 @@ export class FireStoreService {
     this.itemsCollection = this.db.collection < any > (this.entity);
     return this.itemsCollection.doc(item.id).set(
       item, {
-      merge: true 
-    });
+        merge: true
+      });
 
   }
 
 
 
-    public remove(item: any){
-      this.itemsCollection = this.db.collection < any > (this.entity);
-      this.itemsCollection.doc(item.id).delete();
-    }
+  public remove(item: any) {
+    this.itemsCollection = this.db.collection < any > (this.entity);
+    this.itemsCollection.doc(item.id).delete();
+  }
 
 
 }
@@ -96,7 +101,7 @@ export class FireStoreRESTService {
   public get(): Observable < any > {
 
     console.log(this.auth.user);
-        var headers = new Headers({  'Authorization': this.auth.token });
+    var headers = new Headers({ 'Authorization': this.auth.token });
 
     return this.http.get(this.url + this.entity)
       .map(item => {
